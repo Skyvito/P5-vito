@@ -1,131 +1,71 @@
-const product = window.location.search.split("?").join("")
-console.log(product);
+const url = window.location.search;
+const urlSearchParams = new URLSearchParams(url);
+const id = urlSearchParams.get("id");
 
-let produitTab = []
+const fetchproduct = async (id) => {
+    try {
+        await fetch(`http://localhost:3000/api/products/${id}`)
+            .then((reponse) => reponse.json())
+            .then((product) => {
+                displayProduct(product);
+            });
+    } catch (error) {
+        console.log(error);
+    }
+};
 
-const fetchproduct = async () => {
-    await fetch(`http://localhost:3000/api/products/${product}`)
-    .then((reponse) => reponse.json())
-    .then((Promise) => {
-        produitTab = Promise;
-        console.log(produitTab);
-       
-    })
-}
+const displayProduct = (product) => {
+    const imgElement = document.createElement("img");
+    const itemImg = document.querySelector(".item__img");
+    imgElement.setAttribute("src", product.imageUrl);
+    imgElement.setAttribute("alt", product.altTxt);
+    itemImg.appendChild(imgElement);
 
+    const titre = document.getElementById("title");
+    titre.innerText = product.name;
 
+    const prixElement = document.getElementById("price");
+    prixElement.innerText = product.price;
 
+    const descriptionElement = document.getElementById("description");
+    descriptionElement.innerText = product.description;
 
-const produits = async () => {
-    await fetchproduct()
+    let colors = document.querySelector("#colors");
 
+    product.colors.forEach((color) => {
+        let options = document.createElement("option");
 
+        options.innerText = color;
 
-     document.querySelector(".item__img").innerHTML = `
-      <img class = "item__img" src=${produitTab.imageUrl} alt="${produitTab.altTxt}">
-      `
-      document.querySelector(".item__content__titlePrice").innerHTML = `
-      <h1 id="title">${produitTab.name}</h1>
-      `
+        colors.appendChild(options);
+    });
+};
 
-      document.querySelector(".item__content__titlePrice").innerHTML = `
-      <p>Prix : <span id="price">${produitTab.price}</span>€</p>
-      `
+fetchproduct(id);
 
-      document.querySelector(".item__content__description").innerHTML = `
-      <p id="description">${produitTab.description}</p>
-      `
+const buttonPanier = document.getElementById("addToCart");
+buttonPanier.addEventListener("click", () => {
+    const quantity = document.getElementById("quantity");
+    const color = document.getElementById("colors");
 
-      let color = document.querySelector("#colors")
-     
+    let card = JSON.parse(localStorage.getItem("card"));
 
-// rappel La méthode forEach() permet d'exécuter une fonction donnée sur chaque élément du tableau
-      produitTab.colors.forEach((couleur) => {
-        
-        console.log(couleur);
-        let options = document.createElement("option")
+    
 
-        options.innerHTML = `${couleur}`
-        options.value = `${couleur}`
+    if (!card) {
+        card = [];
+    }
 
-        color.appendChild(options)
-       
+    const product = {
+        id: id,
+        color: color.value,
+        quantity: quantity.value,
+    };
 
+    card.push(product);
 
-      })
+    console.log(card);
 
-   
-}
-
-
-produits()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    localStorage.setItem("card", JSON.stringify(card));
+});
 

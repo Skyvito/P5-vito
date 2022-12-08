@@ -1,0 +1,28 @@
+accueil
+
+fetch vers l'api
+on récupère tous les produits
+on boucle sur les produits
+dans la boucle on créé les éléments et on les ajoute au html
+
+produit -> id = xxxxxxxxxxxxxx
+
+on récupère l'id
+fetch vers l'api en utilisant l'id
+on récupère le produit en question
+on créé les éléments et on les ajoute au html
+petit subtilité = on boucle sur les couleurs pour les afficher
+
+faire l'ajout au panier
+ton panier sera un tableau d'objet
+un objet contient id, quantity, color
+
+panier
+
+on récupère le panier (local storage)
+on boucle sur le panier
+dans la boucle fetch vers l'api en utilisant l'id
+on a donc les info du produit + les info d'un produit du panier (quantity, l'id et la couleur)
+on créé les éléments et on les ajoute au html
+
+
