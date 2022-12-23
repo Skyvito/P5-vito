@@ -1,28 +1,25 @@
-let card = localStorage.getItem("card");
-card = JSON.parse(card);
+let cart = localStorage.getItem("cart");
+cart = JSON.parse(cart);
 let totalPrice = 0;
 let totalArticle = 0;
 
-console.log(card);
-
-card.forEach((element) => {
+cart.forEach((element) => {
     fetch("http://localhost:3000/api/products/" + element.id)
         .then((reponse) => reponse.json())
         .then((product) => {
             displayProduct(product, element);
-        })
+        }); /*
         .then(() => {
             // fetch("http://localhost:3000/api/products/" + element.id)
             //     .then((reponses) => reponses.json())
             //     .then((products) => {
             //         console.log(products);
             //         localStorage.setItem("tab", JSON.stringify(products._id));
-                });
-        });
+        });*/
+});
 // });
 
 const displayProduct = (product, element) => {
-    
     const item = document.getElementById("cart__items");
     const article = document.createElement("Article");
     article.className = "cart__item";
@@ -99,49 +96,52 @@ const displayProduct = (product, element) => {
     ArticleNumber.innerText = totalArticle;
 };
 
-const btnFomulaire = document.querySelector("#order");
+const btnFomulaire = document.getElementById("order");
 
 // Au click du bouton je récupère les valeurs du formulaire dans le local storage
 // click
-btnFomulaire.addEventListener("mouseenter", () => {
+btnFomulaire.addEventListener("click", (e) => {
+    e.preventDefault();
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let address = document.getElementById("address").value;
     let city = document.getElementById("city").value;
     let email = document.getElementById("email").value;
 
-    let test = localStorage.getItem("card");
-    test = JSON.parse(test);
-  
+    productsId = [];
 
-  TabId = []
+    cart.forEach((element) => {
+        productsId.push(element.id);
+    });
 
-  // Je veux récuperer les id de test dans le tableau mais j'en récupere a chaque fois que une
-  //Donc la avec le if je veux faire en sorte qu' a chaque fois que test.id et inférieur a aux idées du tableau alors j'en rajoute une
- 
-    if (i = test.id , i < length.test , i++) {
-  TabId.push(test[i].id)
-  console.log(TabId);
- 
-}
-console.log(TabId);
     let order = {
-        firstName: firstName,
-        lastName: lastName,
-        address: address,
-        city: city,
-        email: email,
-        products: TabId,
+        contact: {
+            firstName: firstName,
+            lastName: lastName,
+            address: address,
+            city: city,
+            email: email,
+        },
+        products: productsId,
     };
 
     console.log(order);
-    const PostFetch = fetch("http://localhost:3000/api/products/order", {
+
+    sendOrder(order);
+});
+
+const sendOrder = async (order) => {
+    const response = await fetch("http://localhost:3000/api/products/order", {
         method: "POST",
         body: JSON.stringify(order),
         headers: {
-            "Content-type": "application/json",
+            Accept: "appliction/json",
+            "Content-Type": "application/json",
         },
     });
-
-});
-// }
+    const data = await response.json().then((response) => {
+        document.location.href = "confirmation.html?id=" + response.orderId;
+    });
+    console.log(data);
+    console.log(response);
+};

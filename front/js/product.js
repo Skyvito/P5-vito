@@ -46,14 +46,17 @@ fetchproduct(id);
 const buttonPanier = document.getElementById("addToCart");
 buttonPanier.addEventListener("click", () => {
     const quantity = document.getElementById("quantity");
+
+    while (quantity.value <= 0) {
+        parseInt(quantity.value);
+    }
+
     const color = document.getElementById("colors");
 
-    let card = JSON.parse(localStorage.getItem("card"));
+    let cart = JSON.parse(localStorage.getItem("cart"));
 
-    
-
-    if (!card) {
-        card = [];
+    if (!cart) {
+        cart = [];
     }
 
     const product = {
@@ -62,10 +65,9 @@ buttonPanier.addEventListener("click", () => {
         quantity: quantity.value,
     };
 
-    card.push(product);
+    cart.push(product);
 
-    console.log(card);
+    console.log(cart);
 
-    localStorage.setItem("card", JSON.stringify(card));
+    localStorage.setItem("cart", JSON.stringify(cart));
 });
-
