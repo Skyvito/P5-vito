@@ -242,3 +242,4 @@ const cityErrorMsg = document.getElementById("cityErrorMsg");
 const email = document.getElementById("email");
 const emailErrorMsg = document.getElementById("emailErrorMsg");
 
+// formulaire
