@@ -60,10 +60,32 @@ buttonPanier.addEventListener("click", () => {
         if (!cart) {
             cart = [];
         }
+        /*
+        if (
+            cart.some(
+                (product) => product.id === id && product.color === color.value
+            )
+        ) {
+            cart = cart.map((product) => {
+                if (product._id === id && product.color === color.value) {
+                    product.quantity += parseInt(quantity.value);
+                }
+                return product;
+            });
+        } else {
+            const product = {
+                id: id,
+                color: color.value,
+                quantity: parseInt(quantity.value),
+            };
+            cart.push(product);
+        }
+*/
         //  je vais chercher la valeur qui correspond a mes conditions grace a .find
         let settingQuantity = cart.find(
             (product) => product.id === id && product.color === color.value
         );
+
         // utilise le settingQuantity.quantity a la place de product.quantity car en déclarant la varible settingQuantity
         // on a incrémenté product donc elle a pris ça valeur
         if (settingQuantity) {
