@@ -1,7 +1,15 @@
-const url = window.location.search;
-const urlSearchParams = new URLSearchParams(url);
-const id = urlSearchParams.get("id");
+// Je recupere la localisation qui va me permettre de récupérer l'id de l'url
 
+const url = document.location;
+console.log(url);
+// J'utilise new url pour pouvoir utiliser  searchParams et searchParams pour pouvoir utiliser l'id grace a get
+
+const urlSearchParams = new URL(url).searchParams;
+console.log(urlSearchParams);
+const id = urlSearchParams.get("id");
+console.log(id);
+
+// J'utilise la méthode fetch pour récupérer les informations sur le produit en utilisant l'ID. j'utilise ensuite la méthode then pour parser les données JSON et appelle la fonction displayProduct pour afficher les détails du produit sur la page.
 const fetchproduct = async (id) => {
     try {
         await fetch(`http://localhost:3000/api/products/${id}`)
@@ -14,7 +22,9 @@ const fetchproduct = async (id) => {
     }
 };
 
+//Je prends en entrée les détails du produit et les utilise pour créer et ajouter des éléments HTML sur la page, image,  titre,  prix, description et des options de couleur pour le produit.
 const displayProduct = (product) => {
+    console.log(product);
     const imgElement = document.createElement("img");
     const itemImg = document.querySelector(".item__img");
     imgElement.setAttribute("src", product.imageUrl);
@@ -44,50 +54,24 @@ const displayProduct = (product) => {
 fetchproduct(id);
 
 const buttonPanier = document.getElementById("addToCart");
+
+// Elle vérifie si une couleur a été choisie et si la quantité est comprise entre 1 et 100. Si ces conditions sont remplies, elle ajoute l'article au panier en utilisant les données stockées dans localStorage. Si ces conditions ne sont pas remplies, elle affiche un message d'erreur et empêche l'utilisateur de cliquer sur le bouton à nouveau pendant 2 secondes
 buttonPanier.addEventListener("click", () => {
     const quantity = document.getElementById("quantity");
 
     const color = document.getElementById("colors");
 
-    // si la couleur n'est pas égal a 0 donc couleur pas choisie alors ça ne marche pas et si la quantité n'est pas entre 100 et 0 alors ça ne marche pas
-    // J'utilise les ET logique pour rajouter des contraintes pour l'excution du produit si un est pas respecté alors ça ne s'applique pas
-
     if (color.value != 0 && quantity.value <= 100 && quantity.value > 0) {
-        // si la carte existe deja alors on creer sinon ou creer pas on saute le if ça nous permet d'avoir un seul tableau avec tous les éléments
-        // et de rajouter a chaque ajout de canape dans la meme cart
         let cart = JSON.parse(localStorage.getItem("cart"));
 
         if (!cart) {
             cart = [];
         }
-        /*
-        if (
-            cart.some(
-                (product) => product.id === id && product.color === color.value
-            )
-        ) {
-            cart = cart.map((product) => {
-                if (product._id === id && product.color === color.value) {
-                    product.quantity += parseInt(quantity.value);
-                }
-                return product;
-            });
-        } else {
-            const product = {
-                id: id,
-                color: color.value,
-                quantity: parseInt(quantity.value),
-            };
-            cart.push(product);
-        }
-*/
-        //  je vais chercher la valeur qui correspond a mes conditions grace a .find
+
         let settingQuantity = cart.find(
             (product) => product.id === id && product.color === color.value
         );
 
-        // utilise le settingQuantity.quantity a la place de product.quantity car en déclarant la varible settingQuantity
-        // on a incrémenté product donc elle a pris ça valeur
         if (settingQuantity) {
             settingQuantity.quantity += parseInt(quantity.value);
         } else {
@@ -99,16 +83,16 @@ buttonPanier.addEventListener("click", () => {
             cart.push(product);
         }
 
-        // console.log(settingQuantity);
-
         console.log(cart);
 
         localStorage.setItem("cart", JSON.stringify(cart));
     } else {
-        let erreur = document.createElement("h3");
+        let erreur = document.createElement("P");
         erreur.innerText =
             "Veuillez Choisir une couleur et une quantité de 1 a 100";
         erreur.style.color = "black";
+        erreur.style.fontWeight = "bold";
+        erreur.style.fontSize = "19px";
 
         let parentsErreur = document.querySelector(
             ".item__content__settings__quantity"

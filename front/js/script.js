@@ -1,3 +1,5 @@
+//fonction asynchrone pour récupérer les produits depuis l'API, j'utilise la méthode fetch pour obtenir les données à partir de l'URL de l'api;  une fois la réponse récuperée je la convertie en JSON avec la méthode json et  place data dans la fonction createCards. Si une erreur se produit, elle est capturée dans le bloc catch et affichée dans la console.
+
 async function canapes() {
     try {
         const response = await fetch("http://localhost:3000/api/products");
@@ -9,6 +11,8 @@ async function canapes() {
     }
 }
 
+
+//La fonction createCart Elle prend en entrée les produits récupérés depuis l'API et créer des cartes pour chaque produit contenant un id, une image, le titre et une description, a l'aide de forEach
 const createCards = (products) => {
     console.log(products);
     products.forEach((product) => {
