@@ -11,7 +11,6 @@ async function canapes() {
     }
 }
 
-
 //La fonction createCart Elle prend en entrée les produits récupérés depuis l'API et créer des cartes pour chaque produit contenant un id, une image, le titre et une description, a l'aide de forEach
 const createCards = (products) => {
     console.log(products);

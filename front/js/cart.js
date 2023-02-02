@@ -262,7 +262,9 @@ const sendOrder = async (order) => {
     });
 
     const data = await response.json().then((response) => {
+        localStorage.removeItem("cart");
         document.location.href = "confirmation.html?id=" + response.orderId;
+        
     });
     console.log(data);
     console.log(response);
