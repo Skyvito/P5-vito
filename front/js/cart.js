@@ -159,10 +159,10 @@ firstName.addEventListener("input", () => {
         firstNameErrorMsg.innerText =
             "Veuillez écrire votre prénom en commençant par une majuscule";
     } else if (firstName.value.length < 3 || firstName.value.length > 15) {
-        firstNameErrorMsg.innerHTML =
+        firstNameErrorMsg.innerText =
             "Votre prénom doit contenir entre 3 et 15 lettres";
     } else {
-        firstNameErrorMsg.innerHTML = "";
+        firstNameErrorMsg.innerText = "";
         firstnameTrue = true;
     }
 });
@@ -172,10 +172,10 @@ lastName.addEventListener("input", () => {
         lastNameErrorMsg.innerText =
             "Veuillez écrire votre nom en commençant par une majuscule";
     } else if (lastName.value.length < 3 || lastName.value.length > 15) {
-        lastNameErrorMsg.innerHTML =
+        lastNameErrorMsg.innerText =
             "Votre prénom doit contenir entre 3 et 15 lettres";
     } else {
-        lastNameErrorMsg.innerHTML = "";
+        lastNameErrorMsg.innerText = "";
         lastNameTrue = true;
     }
 });
@@ -264,7 +264,6 @@ const sendOrder = async (order) => {
     const data = await response.json().then((response) => {
         localStorage.removeItem("cart");
         document.location.href = "confirmation.html?id=" + response.orderId;
-        
     });
     console.log(data);
     console.log(response);
@@ -289,7 +288,7 @@ const deleteFunction = (element) => {
     location.reload();
 };
 
-//Cette fonction permet de changer la quantité total d'article dans le panier. La fonction commence par trouver le produit dans le panier en utilisant la méthode find sur l'objet cart. Si le produit existe dans le panier, la quantité de l'élement est mise à jour en utilisant la valeur saisie par l'utilisateur. Ensuite, le panier est mis à jour en utilisant localStorage.setItem pour stocker les modifications dans le stockage local du navigateur. Enfin, la quantité totale de produits dans le panier est mise à jour en parcourant tous les produits dans le panier et en ajoutant leur quantité.
+//Cette fonction permet de changer la quantité total d'article dans le panier. La fonction commence par trouver le produit dans le panier en utilisant la méthode find sur l'objet cart. Si le produit existe dans le panier, la quantité de l'élement est mise à jour en utilisant la valeur saisie par l'utilisateur. Ensuite, le panier est mis à jour en utilisant localStorage.setItem pour stocker les modifications dans le stockage local du navigateur. Enfin,
 
 const changeQuantity = (e, element) => {
     const cartProduct = cart.find(
@@ -301,7 +300,7 @@ const changeQuantity = (e, element) => {
         localStorage.setItem("cart", JSON.stringify(cart));
         let modifQuantity = 0;
         console.log(element.quantity);
-
+        //la quantité totale de produits dans le panier est mise à jour en parcourant tous les produits dans le panier et en ajoutant leur quantité.
         for (const products of cart) {
             modifQuantity = modifQuantity + parseInt(products.quantity);
             console.log(products);
@@ -318,8 +317,8 @@ const updateTotalPrice = () => {
         fetch("http://localhost:3000/api/products/" + element.id)
             .then((response) => response.json())
             .then((product) => {
-                console.log(product);
-                console.log(element);
+                console.log(product.price);
+                console.log(element.quantity);
                 totalPrice += element.quantity * product.price;
                 console.log(totalPrice);
                 document.getElementById("totalPrice").innerText = totalPrice;
